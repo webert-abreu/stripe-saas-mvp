@@ -5,7 +5,7 @@
   "main": "src/server.ts",
   "scripts": {
     "dev": "nodemon src/server.ts",
-    "start": "npx prisma migrate deploy && ts-node src/server.ts"
+    "start": "npx prisma migrate deploy && ts-node --transpile-only src/server.ts"
   },
   "keywords": [],
   "author": "",
