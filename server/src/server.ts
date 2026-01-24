@@ -77,7 +77,7 @@ app.post("/api/create-checkout-session", async (req, res) => {
           price_data: {
             currency: "brl",
             product_data: {
-              name: "StripeSaaS PRO (Assinatura Mensal)",
+              name: "Gestor de Faturas (Assinatura Mensal)",
               description: "Acesso ilimitado a downloads e suporte.",
             },
             unit_amount: 2990, // R$ 29,90
