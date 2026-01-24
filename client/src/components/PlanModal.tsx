@@ -24,6 +24,7 @@ export default function PlanModal({ isOpen, onClose, userId }: PlanModalProps) {
       const data = await response.json();
       if (data.url) window.location.href = data.url;
     } catch (error) {
+      console.error(error); // <--- ADICIONE ISSO AQUI
       alert("Erro ao conectar com pagamento");
       setLoading(false);
     }
