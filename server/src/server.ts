@@ -86,8 +86,8 @@ app.post("/api/create-checkout-session", async (req, res) => {
       ],
       mode: "subscription", // <--- MUDOU DE 'payment' PARA 'subscription'
       client_reference_id: stripeAccountId,
-      success_url: "stripe-saas-mvp.vercel.app/app?success=true",
-      cancel_url: "stripe-saas-mvp.vercel.app/app?canceled=true",
+      success_url: "https://stripe-saas-mvp.vercel.app/app?success=true",
+      cancel_url: "https://stripe-saas-mvp.vercel.app/app?canceled=true",
     });
     res.json({ url: session.url });
   } catch (err: any) {
