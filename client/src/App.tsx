@@ -41,7 +41,6 @@ export default function App() {
   const [endDate, setEndDate] = useState("");
   const [ping, setPing] = useState(24);
 
-  // --- AQUI ESTAVA FALTANDO ESSA LINHA! ---
   // Estado para guardar o ID de quem foi bloqueado
   const [userIdToUpgrade, setUserIdToUpgrade] = useState("");
 
@@ -193,8 +192,9 @@ export default function App() {
               <Zap className="w-5 h-5 text-white" />
             </div>
             <div>
+              {/* --- AQUI ESTAVA O NOME ANTIGO, AGORA ESTÁ ATUALIZADO --- */}
               <span className="font-bold text-base text-white tracking-tight block leading-none">
-                StripeSaaS
+                GestorDeFaturas
               </span>
               <span className="text-[10px] text-slate-500 font-medium">
                 Enterprise Edition
