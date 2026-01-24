@@ -33,7 +33,7 @@ export default function Landing() {
             <div className="bg-indigo-600 p-1.5 rounded-lg shadow-lg shadow-indigo-500/20">
               <Zap className="w-5 h-5 text-white" />
             </div>
-            GestorDeFaturas
+            Gestor De Faturas
           </div>
           <div className="flex items-center gap-6">
             <a
@@ -166,7 +166,7 @@ export default function Landing() {
                 </div>
                 <div>
                   <h3 className="text-xl font-bold text-white">
-                    O Jeito GestorDeFaturas
+                    O Jeito Gestor De Faturas
                   </h3>
                   <p className="text-slate-400 text-sm">
                     Problema resolvido em segundos
