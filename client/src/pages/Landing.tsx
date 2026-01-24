@@ -33,7 +33,7 @@ export default function Landing() {
             <div className="bg-indigo-600 p-1.5 rounded-lg shadow-lg shadow-indigo-500/20">
               <Zap className="w-5 h-5 text-white" />
             </div>
-            StripeSaaS
+            GestorDeFaturas
           </div>
           <div className="flex items-center gap-6">
             <a
@@ -166,7 +166,7 @@ export default function Landing() {
                 </div>
                 <div>
                   <h3 className="text-xl font-bold text-white">
-                    O Jeito StripeSaaS
+                    O Jeito GestorDeFaturas
                   </h3>
                   <p className="text-slate-400 text-sm">
                     Problema resolvido em segundos
@@ -176,7 +176,7 @@ export default function Landing() {
               <div className="space-y-4">
                 <div className="bg-slate-950 p-4 rounded-lg border border-slate-800 flex justify-between items-center">
                   <span className="text-slate-300 text-sm">
-                    faturas_janeiro_2024.zip
+                    faturas_janeiro_2026.zip
                   </span>
                   <span className="text-indigo-400 text-xs font-bold bg-indigo-500/10 px-2 py-1 rounded">
                     PRONTO
@@ -385,8 +385,8 @@ export default function Landing() {
 
         <div className="mt-20 pt-8 border-t border-slate-900 text-center">
           <p className="text-slate-600 text-sm flex items-center justify-center gap-2">
-            <Lock className="w-3 h-3" /> 2024 StripeSaaS Technology. Feito por
-            Indie Hackers.
+            <Lock className="w-3 h-3" /> 2026 GestorDeFaturas Technology. Feito
+            por WAS Select.
           </p>
         </div>
       </section>
