@@ -12,7 +12,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const prisma = new PrismaClient();
 
-// Inicializa a Stripe
+// Inicializa a Stripe do Dono do SaaS (Você) para cobrar assinaturas
 const myStripe = new Stripe(process.env.MY_STRIPE_SECRET_KEY as string);
 
 // --- ROTA WEBHOOK ---
@@ -56,16 +56,18 @@ app.post(
 app.use(cors());
 app.use(express.json());
 
-// Middleware de Segurança
+// Middleware de Segurança (Bring Your Own Key)
 const requireStripeKey = (req: any, res: any, next: any) => {
   const key = req.headers["x-stripe-key"];
   if (!key || !key.startsWith("sk_"))
     return res.status(401).json({ error: "Chave ausente." });
-  req.stripe = new Stripe(key, { apiVersion: "2025-12-15.clover" });
+
+  // @ts-ignore - Removida versão específica para evitar erros de compatibilidade
+  req.stripe = new Stripe(key);
   next();
 };
 
-// --- ROTA DE CRIAÇÃO DE PAGAMENTO (CORRIGIDA PARA MENSAL) ---
+// --- ROTA DE CRIAÇÃO DE ASSINATURA ---
 app.post("/api/create-checkout-session", async (req, res) => {
   const { stripeAccountId } = req.body;
   try {
@@ -75,17 +77,18 @@ app.post("/api/create-checkout-session", async (req, res) => {
           price_data: {
             currency: "brl",
             product_data: {
-              name: "StripeSaaS PRO (Assinatura Mensal)", // Mudei o nome
+              name: "StripeSaaS PRO (Assinatura Mensal)",
               description: "Acesso ilimitado a downloads e suporte.",
             },
             unit_amount: 2990, // R$ 29,90
-            recurring: { interval: "month" }, // <--- O SEGREDO DA MENSALIDADE
+            recurring: { interval: "month" }, // Cobrança Recorrente
           },
           quantity: 1,
         },
       ],
-      mode: "subscription", // <--- MUDOU DE 'payment' PARA 'subscription'
+      mode: "subscription",
       client_reference_id: stripeAccountId,
+      // ATENÇÃO: Confirme se este é o link exato da sua Vercel
       success_url: "https://stripe-saas-mvp.vercel.app/app?success=true",
       cancel_url: "https://stripe-saas-mvp.vercel.app/app?canceled=true",
     });
@@ -94,11 +97,10 @@ app.post("/api/create-checkout-session", async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
-// --- HELPER DE DATAS (CORRIGIDO PARA NÃO DAR ERRO TS2698) ---
+
+// --- HELPER DE DATAS ---
 function buildStripeParams(query: any) {
   const params: Stripe.InvoiceListParams = { limit: 100 };
-
-  // Criamos um objeto temporário para garantir que é um objeto válido
   const dateFilter: any = {};
 
   if (query.startDate) {
@@ -110,7 +112,6 @@ function buildStripeParams(query: any) {
       Math.floor(new Date(query.endDate).getTime() / 1000) + 86399;
   }
 
-  // Só atribuímos se tiver algum filtro
   if (Object.keys(dateFilter).length > 0) {
     params.created = dateFilter;
   }
@@ -118,7 +119,7 @@ function buildStripeParams(query: any) {
   return params;
 }
 
-// Listagem
+// Listagem de Faturas
 // @ts-ignore
 app.get("/api/invoices", requireStripeKey, async (req, res) => {
   try {
@@ -140,7 +141,7 @@ app.get("/api/invoices", requireStripeKey, async (req, res) => {
       })),
     );
   } catch (e) {
-    res.status(500).json({ error: "Erro" });
+    res.status(500).json({ error: "Erro ao listar faturas" });
   }
 });
 
@@ -159,8 +160,11 @@ app.get("/api/download-all", requireStripeKey, async (req, res) => {
         data: { stripeAccountId, isPremium: false },
       });
 
+    // Lógica de Limite Gratuito
     if (!user.isPremium && user.downloadsCount >= 1) {
-      return res.status(403).json({ error: "Limite", stripeAccountId });
+      return res
+        .status(403)
+        .json({ error: "Limite Gratuito Atingido", stripeAccountId });
     }
 
     const invoices = await stripe.invoices.list(buildStripeParams(req.query));
@@ -169,7 +173,9 @@ app.get("/api/download-all", requireStripeKey, async (req, res) => {
     archive.pipe(res);
 
     if (invoices.data.length === 0)
-      archive.append("Vazio", { name: "aviso.txt" });
+      archive.append("Nenhuma fatura encontrada no período.", {
+        name: "aviso.txt",
+      });
     else {
       for (const inv of invoices.data) {
         if (inv.invoice_pdf) {
@@ -193,7 +199,7 @@ app.get("/api/download-all", requireStripeKey, async (req, res) => {
     );
     await archive.finalize();
   } catch (e) {
-    if (!res.headersSent) res.status(500).send("Erro");
+    if (!res.headersSent) res.status(500).send("Erro ao gerar ZIP");
   }
 });
 
