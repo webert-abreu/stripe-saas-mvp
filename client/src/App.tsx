@@ -9,14 +9,13 @@ import {
   LogOut,
   User,
   ShieldCheck,
-  Zap,
   Activity,
   CalendarRange,
   Wifi,
 } from "lucide-react";
 import { Toaster, toast } from "sonner";
 import PlanModal from "./components/PlanModal";
-
+import logoSite from "./assets/logo-site1.png";
 // URL do Backend
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
@@ -188,13 +187,15 @@ export default function App() {
       <header className="bg-slate-900/80 backdrop-blur-md border-b border-slate-800 sticky top-0 z-20">
         <div className="max-w-6xl mx-auto px-6 h-16 flex justify-between items-center">
           <div className="flex items-center gap-3">
-            <div className="bg-indigo-600 p-1.5 rounded-lg shadow-lg shadow-indigo-500/20">
-              <Zap className="w-5 h-5 text-white" />
-            </div>
+            <img
+              src={logoSite}
+              alt="Gestor de Faturas"
+              className="w-8 h-8 rounded-lg shadow-lg shadow-indigo-500/20"
+            />
             <div>
               {/* --- AQUI ESTAVA O NOME ANTIGO, AGORA ESTÁ ATUALIZADO --- */}
               <span className="font-bold text-base text-white tracking-tight block leading-none">
-                GestorDeFaturas
+                Gestor De Faturas
               </span>
               <span className="text-[10px] text-slate-500 font-medium">
                 Enterprise Edition

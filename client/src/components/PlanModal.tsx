@@ -1,5 +1,4 @@
-import { X, CheckCircle2, Zap, Loader2 } from "lucide-react";
-import { useState } from "react";
+import { X, CheckCircle2, Zap } from "lucide-react";
 
 interface PlanModalProps {
   isOpen: boolean;
@@ -7,28 +6,8 @@ interface PlanModalProps {
   userId: string;
 }
 
-export default function PlanModal({ isOpen, onClose, userId }: PlanModalProps) {
-  const [loading, setLoading] = useState(false);
-
+export default function PlanModal({ isOpen, onClose }: PlanModalProps) {
   if (!isOpen) return null;
-
-  const handleSubscribe = async () => {
-    setLoading(true);
-    try {
-      const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
-      const response = await fetch(`${API_URL}/api/create-checkout-session`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ stripeAccountId: userId }),
-      });
-      const data = await response.json();
-      if (data.url) window.location.href = data.url;
-    } catch (error) {
-      console.error(error); // <--- ADICIONE ISSO AQUI
-      alert("Erro ao conectar com pagamento");
-      setLoading(false);
-    }
-  };
 
   return (
     <div className="fixed inset-0 bg-black/90 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-in fade-in">
@@ -52,7 +31,7 @@ export default function PlanModal({ isOpen, onClose, userId }: PlanModalProps) {
           </p>
         </div>
 
-        {/* --- CARTÃO DE PREÇO (ATUALIZADO PARA MENSAL) --- */}
+        {/* --- CARTÃO DE PREÇO (R$ 49,90) --- */}
         <div className="bg-gradient-to-b from-slate-800 to-slate-900 border border-indigo-500/30 rounded-2xl p-6 mb-6">
           <div className="flex justify-between items-end mb-4">
             <div>
@@ -60,7 +39,7 @@ export default function PlanModal({ isOpen, onClose, userId }: PlanModalProps) {
               <p className="text-indigo-400 text-xs">Cancele quando quiser</p>
             </div>
             <div className="text-right">
-              <span className="text-3xl font-bold text-white">R$ 29,90</span>
+              <span className="text-3xl font-bold text-white">R$ 49,90</span>
               <span className="text-slate-400 text-xs font-medium ml-1">
                 /mês
               </span>
@@ -82,17 +61,15 @@ export default function PlanModal({ isOpen, onClose, userId }: PlanModalProps) {
             </li>
           </ul>
 
-          <button
-            onClick={handleSubscribe}
-            disabled={loading}
-            className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 rounded-xl transition-all shadow-lg shadow-indigo-500/25 flex items-center justify-center gap-2 active:scale-95"
+          {/* --- AQUI ESTÁ O SEU LINK NOVO --- */}
+          <a
+            href="https://buy.stripe.com/4gM28q4QQ9lp8uF54rgEg00"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 rounded-xl transition-all shadow-lg shadow-indigo-500/25 flex items-center justify-center gap-2 active:scale-95 text-center block"
           >
-            {loading ? (
-              <Loader2 className="w-5 h-5 animate-spin" />
-            ) : (
-              "Assinar Plano Mensal"
-            )}
-          </button>
+            Assinar Plano Mensal
+          </a>
         </div>
 
         <p className="text-center text-[10px] text-slate-600">

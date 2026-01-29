@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import {
   ArrowRight,
   CheckCircle2,
-  Zap,
   ShieldCheck,
   Download,
   FileText,
@@ -12,6 +11,8 @@ import {
   ChevronUp,
   Lock,
 } from "lucide-react";
+import logoSite from "../assets/logo-site1.png";
+import LegalModal from "../components/LegalModal";
 
 export default function Landing() {
   const navigate = useNavigate();
@@ -21,8 +22,71 @@ export default function Landing() {
     setOpenFaq(openFaq === index ? null : index);
   };
 
+  // ESTADOS DOS MODAIS
+  const [modalType, setModalType] = useState<"terms" | "privacy" | null>(null);
+
+  // CONTEÚDO DOS TERMOS
+  const termsText = (
+    <>
+      <p>
+        <strong>1. Aceitação dos Termos:</strong> Ao utilizar o Gestor de
+        Faturas, você concorda com estes termos. O serviço é fornecido "como
+        está".
+      </p>
+      <p>
+        <strong>2. Uso do Serviço:</strong> Nossa ferramenta atua apenas como um
+        facilitador para download de faturas da Stripe. Não armazenamos seus
+        dados bancários sensíveis.
+      </p>
+      <p>
+        <strong>3. Responsabilidade:</strong> Não nos responsabilizamos por
+        falhas na API da Stripe ou por uso indevido dos arquivos baixados.
+      </p>
+      <p>
+        <strong>4. Pagamentos:</strong> O serviço pode oferecer planos gratuitos
+        e pagos. Assinaturas podem ser canceladas a qualquer momento.
+      </p>
+    </>
+  );
+
+  const privacyText = (
+    <>
+      <p>
+        <strong>1. Coleta de Dados:</strong> Coletamos apenas seu e-mail e ID da
+        conta Stripe para autenticação e funcionamento do sistema.
+      </p>
+      <p>
+        <strong>2. Segurança:</strong> Utilizamos criptografia e não temos
+        acesso direto ao seu saldo ou capacidade de movimentar fundos.
+      </p>
+      <p>
+        <strong>3. Compartilhamento:</strong> Seus dados nunca serão vendidos a
+        terceiros. Eles são usados estritamente para o funcionamento do SaaS.
+      </p>
+      <p>
+        <strong>4. Cookies:</strong> Utilizamos cookies essenciais para manter
+        sua sessão ativa.
+      </p>
+    </>
+  );
+
   return (
     <div className="min-h-screen bg-slate-950 font-sans text-slate-200 selection:bg-indigo-500/30">
+      {/* --- RENDERIZAÇÃO DOS MODAIS (FALTAVA ISSO) --- */}
+      <LegalModal
+        isOpen={modalType === "terms"}
+        onClose={() => setModalType(null)}
+        title="Termos de Uso"
+        content={termsText}
+      />
+
+      <LegalModal
+        isOpen={modalType === "privacy"}
+        onClose={() => setModalType(null)}
+        title="Política de Privacidade"
+        content={privacyText}
+      />
+
       {/* --- 1. NAVBAR (Fixo) --- */}
       <nav className="fixed w-full z-50 border-b border-slate-800/50 bg-slate-950/80 backdrop-blur-md">
         <div className="max-w-6xl mx-auto px-6 h-16 flex justify-between items-center">
@@ -30,9 +94,11 @@ export default function Landing() {
             className="flex items-center gap-2 font-bold text-xl text-white tracking-tight cursor-pointer"
             onClick={() => window.scrollTo(0, 0)}
           >
-            <div className="bg-indigo-600 p-1.5 rounded-lg shadow-lg shadow-indigo-500/20">
-              <Zap className="w-5 h-5 text-white" />
-            </div>
+            <img
+              src={logoSite}
+              alt="Gestor de Faturas"
+              className="w-8 h-8 rounded-lg"
+            />
             Gestor De Faturas
           </div>
           <div className="flex items-center gap-6">
@@ -302,7 +368,7 @@ export default function Landing() {
               </div>
               <h3 className="text-xl font-bold text-white mb-2">PRO</h3>
               <div className="flex items-baseline gap-1 mb-6">
-                <span className="text-4xl font-bold text-white">R$ 29,90</span>
+                <span className="text-4xl font-bold text-white">R$ 49,90</span>
                 <span className="text-slate-500">/mês</span>
               </div>
               <p className="text-indigo-200 text-sm mb-8">
@@ -384,9 +450,35 @@ export default function Landing() {
         </div>
 
         <div className="mt-20 pt-8 border-t border-slate-900 text-center">
-          <p className="text-slate-600 text-sm flex items-center justify-center gap-2">
-            <Lock className="w-3 h-3" /> 2026 GestorDeFaturas Technology. Feito
-            por WAS Select.
+          {/* --- ADICIONEI OS LINKS DE MODAL AQUI (FALTAVA ISSO) --- */}
+          <div className="flex justify-center gap-6 mb-4 text-xs font-medium text-slate-500">
+            <button
+              onClick={() => setModalType("terms")}
+              className="hover:text-indigo-400 transition-colors"
+            >
+              Termos de Uso
+            </button>
+            <button
+              onClick={() => setModalType("privacy")}
+              className="hover:text-indigo-400 transition-colors"
+            >
+              Política de Privacidade
+            </button>
+          </div>
+
+          <p className="text-slate-600 text-sm flex items-center justify-center gap-1">
+            <Lock className="w-3 h-3" />
+            Todos os direitos reservados 2026 Gestor de Faturas • Desenvolvido
+            por
+            <a
+              href="https://www.instagram.com/wasselect"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-bold hover:text-indigo-400 transition-colors cursor-pointer"
+            >
+              WAS Select
+            </a>
+            .
           </p>
         </div>
       </section>
