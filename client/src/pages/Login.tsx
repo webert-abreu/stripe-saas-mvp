@@ -74,14 +74,14 @@ export default function Login() {
           <form onSubmit={handleLogin} className="space-y-6">
             <div className="space-y-2">
               <label className="text-sm font-medium text-slate-300">
-                Chave de API (Secret Key)
+                Chave de API (rk_live_...)
               </label>
               <div className="relative group">
                 <input
                   type={showKey ? "text" : "password"}
                   value={apiKey}
                   onChange={(e) => setApiKey(e.target.value)}
-                  placeholder="sk_live_..."
+                  placeholder="rk_live_..."
                   className="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-3.5 text-white placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition-all font-mono text-sm pr-12"
                 />
                 <button
